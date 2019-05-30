@@ -1,0 +1,10 @@
+######################
+# VS Generated Files #
+######################
+*.VC.db
+*.suo
+*.VC.opendb
+*.sln
+*.VC.db-shm
+*.VC.db-wal
+*.log
