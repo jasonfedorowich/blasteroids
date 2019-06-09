@@ -8,13 +8,36 @@
 #include "blasteroids.h"
 #include "input.h"
 #include "blast.h"
+
+
+#include "asteroid.h"
+#include <io.h>
+#include <windows.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <pthread.h>
+
 static Spaceship* s = NULL;
 ALLEGRO_EVENT_QUEUE* queue = NULL;
 ALLEGRO_TIMER* timer = NULL;
 ALLEGRO_DISPLAY* disp = NULL;
 ALLEGRO_FONT* font = NULL;
+//pthread_t t0;
 
-
+/*void* create_new_asteroid(void* a) {
+	//can parameterize a for levels
+	//int sleep =(int)a;
+	if (random_number(0, 1)) {
+		while (current_asteroid < MAX_ASTEROIDS) {
+			Asteroid* a = create_base();
+			enrich_asteroid(a);
+		}
+	}
+	Sleep(10000);
+} */
 bool get_user_input(ALLEGRO_EVENT* event) {
 	switch (event->keyboard.keycode) {
 	case ALLEGRO_KEY_LEFT:
@@ -41,6 +64,7 @@ void init_game()
 	must_init(al_install_keyboard(), "keyboard");
 
 	 timer = al_create_timer(1.0 / 30.0);
+	 
 	must_init(timer, "timer");
 
 	queue = al_create_event_queue();
@@ -66,6 +90,10 @@ void init_game()
 	s->sx = SCREEN_WIDTH / 2;
 	s->sy = SCREEN_HEIGHT / 2;
 	
+	/*if (pthread_create(&t0, NULL, create_new_asteroid, NULL) == -1) {
+		error("cant create thread");
+	}
+	*/
 }
 
 
@@ -121,7 +149,7 @@ int main()
 
 		if (event.type == ALLEGRO_EVENT_TIMER) {
 			redraw = true;
-
+			
 		}
 
 		if (redraw && al_is_event_queue_empty(queue)) {
@@ -136,6 +164,11 @@ int main()
 	al_destroy_timer(timer);
 	al_destroy_event_queue(queue);
 	destroy_ship(s);
+	
+	/*void* result;
+	if (pthread_join(t0, &result) == -1) {
+		error("error joining");
+	}*/
 
 	return 0;
 }

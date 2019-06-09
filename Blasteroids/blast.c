@@ -9,13 +9,16 @@
 #include <allegro5/allegro_primitives.h>
 
 static Blast* blasts[MAX_BLASTS] = { NULL };
-static int current_blasts = 0;
 
 
 //TODO change to dynamic sized array maybe a vector or arraylist where we can more easily
 //remove elements
 //calling free() on a blast in an array places the
 //blast in a different index need to copy to new array best solution
+Blast** get_blasts() {
+	return blasts;
+}
+
 
 Blast* create_blast(Spaceship* s) {
 	Blast* b = malloc(sizeof(Blast));
@@ -36,15 +39,15 @@ Blast* create_blast(Spaceship* s) {
 	b->color = al_map_rgb(255, 0, 0);
 	b->speed = BLAST_SPEED;
 	b->gone = 1;
-	blasts[current_blasts] = b;
-	b->position_in_tree = current_blasts;
+	blasts[current_blast] = b;
+	b->position_in_tree = current_blast;
 	printf("%d\n", b->position_in_tree);
-	printf("%d\n", current_blasts);
+	printf("%d\n", current_blast);
 
-	current_blasts++;
+	current_blast++;
 	
-	if (current_blasts == MAX_BLASTS) {
-		current_blasts = 0;
+	if (current_blast == MAX_BLASTS) {
+		current_blast = 0;
 	}
 
 	return b;
@@ -58,13 +61,13 @@ void ship_blast(Spaceship* s)
 }
 
 void draw_all_blasts() {
-	for (int i = 0; i < current_blasts; i++) {
+	for (int i = 0; i < current_blast; i++) {
 		draw_blast(blasts[i]);
 	}
 }
 
 void calculate_all_blast_positions() {
-	for (int i = 0; i < current_blasts; i++) {
+	for (int i = 0; i < current_blast; i++) {
 		calculate_blast_position(blasts[i]);
 	}
 }
@@ -79,13 +82,13 @@ static void draw_blast(Blast* b) {
 	al_draw_line(0, 0, 0, -3, b->color, 2.0f);
 }
 static void adjust_array(int pos) {
-	for (int i = pos; i < current_blasts; i++) {
+	for (int i = pos; i < current_blast; i++) {
 
 		blasts[i] = blasts[i + 1];
 		blasts[i + 1] = NULL;
 
 	}
-	current_blasts--;
+	current_blast--;
 }
 
 static void destroy_blast(Blast* b) {

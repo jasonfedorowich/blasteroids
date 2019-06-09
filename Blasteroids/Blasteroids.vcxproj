@@ -144,6 +144,7 @@
     <ClCompile Include="blast.c" />
     <ClCompile Include="blasteroids.c" />
     <ClCompile Include="input.c" />
+    <ClCompile Include="logic.c" />
     <ClCompile Include="spaceship.c" />
     <ClCompile Include="vector.c" />
   </ItemGroup>
@@ -152,6 +153,7 @@
     <ClInclude Include="blast.h" />
     <ClInclude Include="blasteroids.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="logic.h" />
     <ClInclude Include="spaceship.h" />
     <ClInclude Include="vector.h" />
   </ItemGroup>

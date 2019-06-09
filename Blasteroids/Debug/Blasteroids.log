@@ -1,12 +1,5 @@
 ﻿  asteroid.c
-C:\Users\jason\Documents\C Projects\Blasteroids\Blasteroids\asteroid.c(15): warning C4013: 'puts' undefined; assuming extern returning int
-  blast.c
-C:\Users\jason\Documents\C Projects\Blasteroids\Blasteroids\blast.c(25): warning C4013: 'puts' undefined; assuming extern returning int
-C:\Users\jason\Documents\C Projects\Blasteroids\Blasteroids\blast.c(31): warning C4013: 'printf' undefined; assuming extern returning int
-  blasteroids.c
-C:\Users\jason\Documents\C Projects\Blasteroids\Blasteroids\blasteroids.c(93): warning C4101: 'event': unreferenced local variable
-  spaceship.c
-  Generating Code...
-C:\Users\jason\Documents\C Projects\Blasteroids\Blasteroids\blasteroids.c(25): warning C4716: 'get_user_input': must return a value
-C:\Users\jason\Documents\C Projects\Blasteroids\Blasteroids\asteroid.c(44): warning C4715: 'create_asteroid': not all control paths return a value
+C:\Users\jason\Documents\C Projects\Blasteroids\Blasteroids\blast.h(21): warning C4028: formal parameter 1 different from declaration
+C:\Users\jason\Documents\C Projects\Blasteroids\Blasteroids\asteroid.c(140): warning C4028: formal parameter 1 different from declaration
+C:\Users\jason\Documents\C Projects\Blasteroids\Blasteroids\asteroid.c(142): warning C4013: 'destroy_asteroid' undefined; assuming extern returning int
   Blasteroids.vcxproj -> C:\Users\jason\Documents\C Projects\Blasteroids\Debug\Blasteroids.exe
