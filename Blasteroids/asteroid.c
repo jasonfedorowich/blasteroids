@@ -1,4 +1,6 @@
 #include "asteroid.h"
+
+
 #include "../packages/Allegro.5.2.5.2/build/native/include/allegro5/transformations.h"
 #include "allegro5/color.h"
 #include <allegro5/allegro_primitives.h>
@@ -7,7 +9,6 @@
 #include <stdio.h>
 #include "logic.h"
 //TODO place asteroid in array
-//TODO may need to fix overload
 
 static Asteroid* asteroids[MAX_ASTEROIDS] = { NULL };
 
@@ -25,32 +26,29 @@ static double deg_to_rad(int degree) {
 		puts("Cant initialize pointer");
 		return NULL;
 	}
-
-	al_clear_to_color(al_map_rgb(0, 0, 0));
+	//breaks here
+	//al_clear_to_color(al_map_rgb(0, 0, 0));
 
 	ALLEGRO_COLOR color = al_map_rgb_f(1, 0, 0);
 	a->color = color;
 	a->gone = 1;
-	asteroids[current_asteroid] = a;
-	a->position_in_tree = current_asteroid;
-	printf("%d\n", a->position_in_tree);
-	printf("%d\n", current_asteroid);
-
-	current_asteroid++;
+	
 	return a;
 
 }
+
+ //TODO asteroids should go inwards change this
  void enrich_asteroid(Asteroid* a) {
 	
 	//randomize logic goes here
 	//TODO replace with random number
 	if (random_number(0, 1)) {
 		if (random_number(0, 1)) {
-			a->sx = SCREEN_WIDTH;
+			a->sx = SCREEN_WIDTH - 10;
 			a->sy = random_number(0, SCREEN_HEIGHT);
 		}
 		else {
-			a->sx = 0;
+			a->sx = 0 + 10;
 			a->sy = random_number(0, SCREEN_HEIGHT);
 		}
 
@@ -58,11 +56,11 @@ static double deg_to_rad(int degree) {
 	}
 	else {
 		if (random_number(0, 1)) {
-			a->sy = SCREEN_HEIGHT;
+			a->sy = SCREEN_HEIGHT - 10;
 			a->sx = random_number(0, SCREEN_WIDTH);
 		}
 		else {
-			a->sy = 0;
+			a->sy = 0 + 10;
 			a->sx = random_number(0, SCREEN_WIDTH);
 		}
 	}
@@ -71,7 +69,12 @@ static double deg_to_rad(int degree) {
 	a->heading = random_number(deg_to_rad(0), deg_to_rad(360));
 	a->speed = random_number(ASTEROID_MIN_SPEED, ASTEROID_MAX_SPEED);
 	a->scale = random_double_number(0.6, 1.4);
+	a->position_in_tree = current_asteroid;
+	printf("%d\n", a->position_in_tree);
+	printf("%d\n", current_asteroid);
+	asteroids[current_asteroid] = a;
 	a->next = NULL;
+	current_asteroid++;
 	a->has_children = 0;
 	return;
 }
@@ -86,6 +89,7 @@ static void enrich_child(Asteroid* a, Asteroid* p) {
 	a->has_children = 0;
 	a->scale = random_double_number(p->scale / 2, p->scale);
 	p->next = a;
+	
 	return;
 }
 
@@ -125,17 +129,22 @@ static void draw_asteroid(Asteroid *a)
 }
 
 static void free_asteroid(Asteroid* a) {
-
+	if (a) {
+		if (a->next)
+			free_asteroid(a->next);
+		free(a);
+	}
 }
-
-static void destroy_asteroid(Asteroid* a) {
-	if (a != NULL && a->position_in_tree < MAX_ASTEROIDS && a->position_in_tree > 0) {
-		printf("%d\n", a->position_in_tree);	
-		adjust_array(a->position_in_tree);
-		for (; a != NULL; a = a->next) {
-			free(a);
-		}
-		asteroids[a->position_in_tree] = NULL;
+//TODO change this 
+ static void destroy_asteroid(Asteroid* a) {
+	Asteroid* i = a;
+	if (i != NULL && i->position_in_tree < MAX_ASTEROIDS && i->position_in_tree > 0) {
+		printf("%d\n", i->position_in_tree);
+		asteroids[i->position_in_tree] = NULL;
+		adjust_array(i->position_in_tree, &asteroids, &current_asteroid);
+		free_asteroid(a);
+		
+		
 	}
 	return;
 
@@ -187,9 +196,9 @@ static void calculate_all_collisions() {
 static void create_all_children() {
 	for (int i = 0; i < current_asteroid; i++) {
 		Asteroid* a = asteroids[i];
-		if (a->gone && !a->next) {
+		if (!a->gone && !a->next) {
 			create_child(a);
-			continue;
+	
 		}
 
 	}
@@ -213,6 +222,32 @@ void calculate_all_asteroids()
 	calculate_all_collisions();
 	create_all_children();
 	check_if_destroyed();
+
+	for (int i = 0; i < current_asteroid; i++) {
+		calculate_asteroid_position(asteroids[i]);
+	}
 }
+//TODO need to fix this function
+void draw_all_asteroids() 
+{
+	for (int i = 0; i < current_asteroid; i++) {
+		Asteroid* a = asteroids[i];
+		for (; a != NULL; a = a->next) {
+			if (a->gone) {
+				draw_asteroid(a);
+			}
+		}
+		
+	}
+}
+/*
+static void adjust_array(int pos) {
+	for (int i = pos; i < current_blast; i++) {
 
+		asteroids[i] = asteroids[i + 1];
+		asteroids[i + 1] = NULL;
 
+	}
+	current_asteroid--;
+}
+*/

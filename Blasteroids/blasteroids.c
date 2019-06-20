@@ -25,19 +25,25 @@ ALLEGRO_EVENT_QUEUE* queue = NULL;
 ALLEGRO_TIMER* timer = NULL;
 ALLEGRO_DISPLAY* disp = NULL;
 ALLEGRO_FONT* font = NULL;
-//pthread_t t0;
+pthread_t t0;
 
-/*void* create_new_asteroid(void* a) {
-	//can parameterize a for levels
-	//int sleep =(int)a;
-	if (random_number(0, 1)) {
-		while (current_asteroid < MAX_ASTEROIDS) {
-			Asteroid* a = create_base();
-			enrich_asteroid(a);
+void* create_new_asteroid(void* a) {
+	int running =(int)a;
+
+	while (1) {
+		int number = random_number(1, 3);
+		printf("%d", number);
+		if (number == 1) {
+			while (current_asteroid < MAX_ASTEROIDS) {
+				Asteroid* a = create_base();
+				enrich_asteroid(a); 
+				break;
+			}
 		}
+		Sleep(1000);
 	}
-	Sleep(10000);
-} */
+	
+}
 bool get_user_input(ALLEGRO_EVENT* event) {
 	switch (event->keyboard.keycode) {
 	case ALLEGRO_KEY_LEFT:
@@ -90,14 +96,18 @@ void init_game()
 	s->sx = SCREEN_WIDTH / 2;
 	s->sy = SCREEN_HEIGHT / 2;
 	
-	/*if (pthread_create(&t0, NULL, create_new_asteroid, NULL) == -1) {
-		error("cant create thread");
+	if (pthread_create(&t0, NULL, create_new_asteroid, NULL) == -1) {
+		puts("cant create thread");
 	}
-	*/
+	
 }
 
+//TODO need to close resources
+	//on close close resources and free memory
+void destroy() 
+{
 
-
+}
 
 void update()
 {
@@ -108,6 +118,8 @@ void update()
 	calculate_all_blast_positions();
 	draw_all_blasts();
 
+	calculate_all_asteroids();
+	draw_all_asteroids();
 
 	al_flip_display();
 }
@@ -165,10 +177,10 @@ int main()
 	al_destroy_event_queue(queue);
 	destroy_ship(s);
 	
-	/*void* result;
+	void* result;
 	if (pthread_join(t0, &result) == -1) {
-		error("error joining");
-	}*/
-
+		puts("error joining");
+	}
+	
 	return 0;
 }

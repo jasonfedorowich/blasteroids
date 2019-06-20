@@ -8,3 +8,5 @@
 *.VC.db-shm
 *.VC.db-wal
 *.log
+/Debug/
+Blasteroids.sln

@@ -21,7 +21,7 @@ void ship_blast(Spaceship* s);
 static void calculate_blast_position(Blast* b);
 static void out_of_bounds(Blast* b);
 static void destroy_blast(Blast* b);
-static void adjust_array(int pos);
+//static void adjust_array(int pos);
 static void draw_blast(Blast* b);
 void draw_all_blasts();
 void calculate_all_blast_positions();

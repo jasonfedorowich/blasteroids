@@ -3,7 +3,7 @@
 #include "spaceship.h"
 #include "blasteroids.h"
 #include <math.h>
-
+#include "logic.h"
 #include "../packages/Allegro.5.2.5.2/build/native/include/allegro5/transformations.h"
 #include "allegro5/color.h"
 #include <allegro5/allegro_primitives.h>
@@ -31,7 +31,7 @@ Blast* create_blast(Spaceship* s) {
 
 	b->heading = s->heading;
 	float dx = sin(s->heading) * 2;
-	printf("%d", sin(s->heading));
+	
 	b->sx = s->sx + dx;
 	float dy = -cos(s->heading) * 2;
 
@@ -41,11 +41,10 @@ Blast* create_blast(Spaceship* s) {
 	b->gone = 1;
 	blasts[current_blast] = b;
 	b->position_in_tree = current_blast;
-	printf("%d\n", b->position_in_tree);
-	printf("%d\n", current_blast);
+	
 
 	current_blast++;
-	
+
 	if (current_blast == MAX_BLASTS) {
 		current_blast = 0;
 	}
@@ -80,7 +79,8 @@ static void draw_blast(Blast* b) {
 	al_use_transform(&transform);
 
 	al_draw_line(0, 0, 0, -3, b->color, 2.0f);
-}
+} 
+/*
 static void adjust_array(int pos) {
 	for (int i = pos; i < current_blast; i++) {
 
@@ -90,12 +90,12 @@ static void adjust_array(int pos) {
 	}
 	current_blast--;
 }
-
+*/
 static void destroy_blast(Blast* b) {
 	if (b != NULL && b->position_in_tree < MAX_BLASTS && b->position_in_tree > 0) {
-		printf("%d\n", b->position_in_tree);
- 		blasts[b->position_in_tree] = NULL;
-		adjust_array(b->position_in_tree);
+		
+		blasts[b->position_in_tree] = NULL;
+		adjust_array(b->position_in_tree, &blasts, &current_blast);
 
 		free(b);
 	}
@@ -134,7 +134,6 @@ static void calculate_blast_position(Blast* b) {
 
 	out_of_bounds(b);
 }
-
 
 
 
